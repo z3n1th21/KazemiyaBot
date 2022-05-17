@@ -1,0 +1,17 @@
+{
+  "name": "kazemiyabot",
+  "version": "1.0.0",
+  "description": "most useless osu! bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "z3n1th21",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0"
+  }
+}
