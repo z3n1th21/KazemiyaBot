@@ -1,4 +1,7 @@
 config.json 
+.ssh
+\.bash_profile
+\.bashrc
 
 # Logs
 logs
