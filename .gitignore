@@ -1,4 +1,5 @@
 config.json 
+sandbox.js
 .ssh
 \.bash_profile
 \.bashrc
