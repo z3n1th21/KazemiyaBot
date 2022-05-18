@@ -5,9 +5,9 @@ const { Client, Intents, Collection } = require('discord.js');
 const { token } = require('./config.json');
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
-// Get all commands from ./commands
+// Get all slash commands from ./commands
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
@@ -20,6 +20,18 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
+// Get all chat commands from ./chat_commands
+client.chat_commands = new Collection();
+const chatcommandsPath = path.join(__dirname, 'chat_commands');
+const chatcommandFiles = fs.readdirSync(chatcommandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of chatcommandFiles) {
+    const filePath = path.join(chatcommandsPath, file);
+    const chatcommand = require(filePath);
+    client.chat_commands.set(chatcommand.name, chatcommand);
+}
+
+// Get all events from ./events
 client.events = new Collection();
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
@@ -27,6 +39,7 @@ const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'
 for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
     const event = require(filePath);
+    // Map all supported events to handler functions
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args));
     }
@@ -34,20 +47,6 @@ for (const file of eventFiles) {
         client.on(event.name, (...args) => event.execute(...args));
     }
 }
-
-// // Handle interaction, check if command and try to respond
-// client.on('interactionCreate', async interaction => {
-// 	if (!interaction.isCommand()) return;
-// 	const command = client.commands.get(interaction.commandName);
-// 	if (!command) return;
-// 	try {
-// 		await command.execute(interaction);
-// 	}
-// 	catch (error) {
-// 		console.error(error);
-// 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-// 	}
-// });
 
 // Login to Discord with your client's token
 client.login(token);

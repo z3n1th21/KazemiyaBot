@@ -3,6 +3,8 @@ sandbox.js
 .ssh
 \.bash_profile
 \.bashrc
+archive/
+test*.js
 
 # Logs
 logs
