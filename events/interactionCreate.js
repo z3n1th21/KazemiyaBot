@@ -1,7 +1,7 @@
 module.exports = {
     name: 'interactionCreate',
     async execute(interaction) {
-        console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
+        // console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
 
         // Handle interaction, check if command and try to respond
         const client = interaction.client;
