@@ -3,7 +3,6 @@ module.exports = {
     async execute(client, interaction, ...args) {
         const channel = client.channels.cache.get(interaction.channelId);
 
-        console.log(interaction.author);
         if (interaction.author.id !== '258741232774152212') {
             channel.send('You don\'t have permission for this.');
             return;
