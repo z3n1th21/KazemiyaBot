@@ -2,10 +2,13 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Intents, Collection } = require('discord.js');
-const { token } = require('./config.json');
+const { token } = require('../config.json');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+
+// Authenticate osu! API
+require('./init-osu.js');
 
 // Get all slash commands from ./commands
 client.commands = new Collection();
