@@ -11,13 +11,8 @@ module.exports = {
         if (!args[0][0]) {
             channel.send('This channel: ' + channel);
         }
-        else if (String(args[0][0]).toLowerCase() === 'sigint') {
+        else if (String(args[0][0]).toLowerCase() === 'kill') {
             process.kill(process.pid, 'SIGINT');
-        }
-        else if (String(args[0][0]).toLowerCase() === 'sigterm') {
-            process.kill(process.pid, 'SIGTERM');
-        }
-        else if (String(args[0][0]).toLowerCase() === 'sigkill') {
             process.kill(process.pid, 'SIGKILL');
         }
     },

@@ -1,15 +1,15 @@
 module.exports = {
     name: 'messageCreate',
-    async execute(msgInteraction) {
+    async execute(msg_interaction) {
         const prefix = ')';
-        const client = msgInteraction.client;
+        const client = msg_interaction.client;
 
-        if (msgInteraction.author.bot) return;
-        if (!msgInteraction.guild) return;
-        if (!msgInteraction.content.startsWith(prefix)) return;
-        if (!msgInteraction.member) msgInteraction.member = await msgInteraction.guild.fetchMember(msgInteraction);
+        if (msg_interaction.author.bot) return;
+        if (!msg_interaction.guild) return;
+        if (!msg_interaction.content.startsWith(prefix)) return;
+        if (!msg_interaction.member) msg_interaction.member = await msg_interaction.guild.fetchMember(msg_interaction);
 
-        const args = msgInteraction.content.slice(prefix.length).trim().split(/ +/g);
+        const args = msg_interaction.content.slice(prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
 
         if (command.length === 0) return;
@@ -17,6 +17,8 @@ module.exports = {
         const chat_command = client.chat_commands.get(command);
         // if (!chat_command) chat_command = client.commands.get(client.aliases.get(command));
 
-        if (chat_command) chat_command.execute(client, msgInteraction, args);
+        if (chat_command) {
+            chat_command.execute(client, msg_interaction, args);
+        }
     },
 };

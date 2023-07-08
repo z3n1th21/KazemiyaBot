@@ -1,52 +1,63 @@
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Intents, Collection } = require('discord.js');
-const { token } = require('../config.json');
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const { token, osu_client_id, osu_client_secret } = require('../config.json');
+const { auth } = require('osu-api-extended');
+const { initialize } = require('./mongo.js');
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Authenticate osu! API
-require('./init-osu.js');
+auth.login(osu_client_id, osu_client_secret, ['public']);
+
+// Initialize MongoDB Client (open connection)
+initialize();
 
 // Get all slash commands from ./commands
 client.commands = new Collection();
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const command_folders_path = path.join(__dirname, 'commands');
+const command_folders = fs.readdirSync(command_folders_path);
 
-for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-    // Set a new item in the Collection
-    // With the key as the command name and the value as the exported module
-    client.commands.set(command.data.name, command);
+for (const folder of command_folders) {
+    const commandsPath = path.join(command_folders_path, folder);
+    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+    for (const file of commandFiles) {
+        const file_path = path.join(commandsPath, file);
+        const command = require(file_path);
+        client.commands.set(command.data.name, command);
+    }
 }
 
 // Get all chat commands from ./chat_commands
 client.chat_commands = new Collection();
-const chatcommandsPath = path.join(__dirname, 'chat_commands');
-const chatcommandFiles = fs.readdirSync(chatcommandsPath).filter(file => file.endsWith('.js'));
+const chat_commands_folders_path = path.join(__dirname, 'chat_commands');
+const chat_command_folders = fs.readdirSync(chat_commands_folders_path);
 
-for (const file of chatcommandFiles) {
-    const filePath = path.join(chatcommandsPath, file);
-    const chatcommand = require(filePath);
-    client.chat_commands.set(chatcommand.name, chatcommand);
+for (const folder of chat_command_folders) {
+    const chat_commands_path = path.join(chat_commands_folders_path, folder);
+    const chat_command_files = fs.readdirSync(chat_commands_path).filter(file => file.endsWith('.js'));
+    for (const file of chat_command_files) {
+        const file_path = path.join(chat_commands_path, file);
+        const chat_command = require(file_path);
+        client.chat_commands.set(chat_command.name, chat_command);
+    }
 }
+
 
 // Get all events from ./events
 client.events = new Collection();
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+const events_path = path.join(__dirname, 'events');
+const event_files = fs.readdirSync(events_path).filter(file => file.endsWith('.js'));
 
-for (const file of eventFiles) {
-    const filePath = path.join(eventsPath, file);
-    const event = require(filePath);
+for (const file of event_files) {
+    const file_path = path.join(events_path, file);
+    const event = require(file_path);
     // Map all supported events to handler functions
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args));
-    }
-    else {
+    } else {
         client.on(event.name, (...args) => event.execute(...args));
     }
 }

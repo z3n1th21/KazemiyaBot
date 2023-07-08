@@ -4,15 +4,17 @@
   "description": "silly little osu! bot",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./src/index.js",
+    "deploy": "node ./src/deploy-commands.js",
+    "deploy-global": "node ./src/deploy-commands.js push",
+    "temp_mongo": "node ./temp_mongo.js",
+    "temp_osu": "node ./temp_osu.js"
   },
   "author": "z3n1th21",
-  "license": "ISC",
+  "license": "GPL",
   "dependencies": {
-    "@discordjs/builders": "^0.13.0",
-    "@discordjs/rest": "^0.4.1",
-    "discord-api-types": "^0.33.0",
-    "discord.js": "^13.7.0",
+    "discord.js": "^14.11.0",
+    "mongodb": "^5.6.0",
     "osu-api-extended": "^2.7.5"
   },
   "devDependencies": {

@@ -1,5 +1,8 @@
 {
-    "token": "DISCoRD.Bot.tokEN",
-    "osu_client_id": "727",
-    "osu_client_secret": "OSUclIEntSeCRET"
+    "token": "discord bot token",
+    "client_id": "discord client/application id",
+    "test_guild_id": "id of discord server for testing",
+    "osu_client_id": "osu client id",
+    "osu_client_secret": "osu client secret",
+    "mongo_uri": "mongo uri"
 }
