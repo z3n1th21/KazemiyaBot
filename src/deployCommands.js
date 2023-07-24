@@ -23,10 +23,17 @@ const rest = new REST({ version: '9' }).setToken(token);
 
 if (process.argv[2] === 'push') {
     rest.put(Routes.applicationCommands(client_id), { body: commands })
-        .then(() => console.log('Successfully registered application commands globally.'))
+        .then(() => console.log('successfully registered application commands globally'))
         .catch(console.error);
 } else {
+    const admin_path = path.join(__dirname, 'admin');
+    const admin_files = fs.readdirSync(admin_path).filter(file => file.endsWith('.js'));
+    for (const file of admin_files) {
+        const file_path = path.join(admin_path, file);
+        const command = require(file_path);
+        commands.push(command.data.toJSON());
+    }
     rest.put(Routes.applicationGuildCommands(client_id, test_guild_id), { body: commands })
-        .then(() => console.log('Successfully registered application commands to test server.'))
+        .then(() => console.log('successfully registered application commands to test server'))
         .catch(console.error);
 }

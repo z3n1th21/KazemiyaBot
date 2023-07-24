@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { v2: osu } = require('osu-api-extended');
-const { get_client } = require('../../mongo.js');
+const { get_client } = require('../../utility/mongo.js');
+const { lookup_user } = require('../../utility/osu.js');
+const { slash_reply } = require('../../utility/discord.js');
 
 const set_mongo_db = async (discord_id, osu_id) => {
     const user_settings = get_client().db('users').collection('settings');
@@ -14,12 +15,17 @@ const set_mongo_db = async (discord_id, osu_id) => {
     );
 };
 
-const send_reply = async (interaction, msg) => {
-    msg.replace('_', '\\_');
-    await interaction.reply({
-        content: msg,
-        ephemeral: true,
-    });
+const register = async (interaction, user, type, id) => {
+    let osu_user;
+    try {
+        osu_user = await lookup_user(user, undefined, type);
+    } catch (error) {
+        await slash_reply(interaction, error.message, true);
+        return;
+    }
+    console.log(osu_user);
+    await set_mongo_db(id, osu_user.id);
+    await slash_reply(interaction, `set osu! user as ${osu_user.username} (id ${osu_user.id})`, true);
 };
 
 module.exports = {
@@ -37,30 +43,11 @@ module.exports = {
                     { name: 'id', value: 'id' },
                     { name: 'username', value: 'username' },
                 )),
-    async execute(interaction) {
+    slash: async (interaction) => {
         const user = interaction.options.getString('user');
         const type = interaction.options.getString('type');
         const id = interaction.user.id;
-        let osu_user;
-        try {
-            osu_user = await osu.user.details(user, undefined, type ?? undefined);
-        } catch (error) {
-            await send_reply(interaction, 'osu api error');
-            return;
-        }
-        if (osu_user.error) {
-            if (!type) {
-                await send_reply(interaction, 'user not found (try specifying the type)');
-                return;
-            } else {
-                await send_reply(interaction, 'user not found');
-                return;
-            }
-        }
-        await set_mongo_db(id, osu_user.id);
-        await interaction.reply({
-            content: `set osu! user as ${osu_user.username} (id ${osu_user.id})`,
-            ephemeral: true,
-        });
+        console.log(`${user} ${type} ${id}`);
+        await register(interaction, user, type, id);
     },
 };

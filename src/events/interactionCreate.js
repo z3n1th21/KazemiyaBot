@@ -1,7 +1,7 @@
 module.exports = {
     name: 'interactionCreate',
     async execute(interaction) {
-        // console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
+        // console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction`);
 
         // Handle interaction, check if it's a command
         const client = interaction.client;
@@ -11,10 +11,10 @@ module.exports = {
         const command = client.commands.get(interaction.commandName);
         if (!command) return;
         try {
-            await command.execute(interaction);
+            await command.slash(interaction);
         } catch (error) {
             console.error(error);
-            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+            await interaction.reply({ content: 'there was an error while executing this command', ephemeral: true });
         }
     },
 };

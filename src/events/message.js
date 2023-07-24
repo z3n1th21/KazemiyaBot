@@ -1,3 +1,4 @@
+// ignore unless users really need it, chat message permissions suck
 module.exports = {
     name: 'messageCreate',
     async execute(msg_interaction) {
@@ -10,15 +11,15 @@ module.exports = {
         if (!msg_interaction.member) msg_interaction.member = await msg_interaction.guild.fetchMember(msg_interaction);
 
         const args = msg_interaction.content.slice(prefix.length).trim().split(/ +/g);
-        const command = args.shift().toLowerCase();
+        const command_name = args.shift().toLowerCase();
 
-        if (command.length === 0) return;
+        if (command_name.length === 0) return;
 
-        const chat_command = client.chat_commands.get(command);
+        const command = client.commands.get(command_name);
         // if (!chat_command) chat_command = client.commands.get(client.aliases.get(command));
-
-        if (chat_command) {
-            chat_command.execute(client, msg_interaction, args);
+        console.log(command);
+        if (command) {
+            command.chat(client, msg_interaction, args);
         }
     },
 };
