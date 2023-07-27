@@ -50,7 +50,7 @@ module.exports = {
 
         if (command) {
             try {
-                command.chat(client, message, args);
+                command.chat(message, args, client);
             } catch (error) {
                 logger.error(error);
                 await message.reply('there was an error executing this command');

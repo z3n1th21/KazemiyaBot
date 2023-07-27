@@ -6,7 +6,10 @@ module.exports = {
             ephemeral: ephemeral,
         });
     },
-    chat_reply: async (client, interaction, msg) => {
-        interaction.reply(msg);
+    chat_reply: async (interaction, msg) => {
+        interaction.reply({
+            content: msg,
+            allowedMentions: { repliedUser: false },
+        });
     },
 };
