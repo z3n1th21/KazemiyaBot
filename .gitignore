@@ -5,6 +5,8 @@ sandbox.js
 \.bashrc
 archive/
 test*.js
+out.txt
+temp*
 
 # Logs
 logs
