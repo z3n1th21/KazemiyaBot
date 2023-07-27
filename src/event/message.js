@@ -1,3 +1,4 @@
+const logger = require('../utility/logger.js');
 const words = [
     'wysi',
     '727',
@@ -34,16 +35,26 @@ module.exports = {
         if (!message.content.startsWith(prefix)) return;
         if (!message.member) message.member = await message.guild.fetchMember(message);
 
-        const args = message.content.slice(prefix.length).trim().toLowerCase().split(/ +/g);
+        // remove prefix, then split by space but keeping quoted strings intact, then remove quotes
+        const regex = /(?:[^\s"']+|("|')[^"']*("|'))+/g;
+        const args = message.content.slice(prefix.length).trim().toLowerCase().match(regex);
+        for (let i = 0; i < args.length; i++) {
+            args[i] = args[i].replaceAll(/'|"/g, '');
+        }
+
+        // retrieve command
         const command_name = args.shift();
-
         if (command_name.length === 0) return;
-
         const command = client.commands.get(command_name);
         // if (!chat_command) chat_command = client.commands.get(client.aliases.get(command));
 
         if (command) {
-            command.chat(client, message, args);
+            try {
+                command.chat(client, message, args);
+            } catch (error) {
+                logger.error(error);
+                await message.reply('there was an error executing this command');
+            }
         }
     },
 };

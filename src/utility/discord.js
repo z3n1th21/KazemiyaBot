@@ -7,6 +7,6 @@ module.exports = {
         });
     },
     chat_reply: async (client, interaction, msg) => {
-        client.channels.cache.get(interaction.channelId).send(msg);
+        interaction.reply(msg);
     },
 };

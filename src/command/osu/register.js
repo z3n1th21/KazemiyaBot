@@ -50,13 +50,13 @@ module.exports = {
     },
     chat: async (client, interaction, args) => {
         if (!args[0]) {
-            chat_reply(client, interaction, 'usage: `)register <your osu! id/username (use quotes if name has spaces)> <"id"/"username" (optional)>`');
+            chat_reply(client, interaction, 'usage: `)register [your osu! id/username (use quotes if needed)]`');
         } else {
-            if (args[1] && (args[1] !== 'user' || args[1] !== 'id')) {
-                chat_reply(client, interaction, 'usage: `)register <your osu! id/username (use quotes if name has spaces)> <"id"/"username" (optional)>`');
-            }
-            const regex = /'|"/ig;
-            const reply = await register(interaction.author.id, args[0].replace(regex, ''), args[1]);
+            // if (args[1] && (args[1] !== 'username' || args[1] !== 'id')) {
+            //     chat_reply(client, interaction, 'usage: `)register [your osu! id/username (use quotes if needed)]`');
+            //     return;
+            // }
+            const reply = await register(interaction.author.id, args[0]);
             chat_reply(client, interaction, reply);
         }
     },
