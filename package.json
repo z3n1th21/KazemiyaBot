@@ -2,9 +2,9 @@
   "name": "kazemiyabot",
   "version": "1.0.0",
   "description": "silly little osu! bot",
-  "exports": "./src/index.js",
+  "main": "./src/index.js",
   "scripts": {
-    "start": "node ./src/index.js",
+    "start": "node .",
     "deploy": "node ./src/deployCommands.js",
     "deploy-global": "node ./src/deployCommands.js push",
     "temp-mongo": "node ./temp_mongo.js",

@@ -7,7 +7,13 @@ const { auth } = require('osu-api-extended');
 const { initialize } = require('./utility/mongo.js');
 
 // create a new Discord client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+// const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+    intents: [GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.MessageContent],
+});
 
 // authenticate osu! api
 auth.login(osu_client_id, osu_client_secret, ['public']);

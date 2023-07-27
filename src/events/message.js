@@ -1,9 +1,34 @@
-// ignore unless users really need it, chat message permissions suck
+const words = [
+    'wysi',
+    '727',
+    'wyfsi',
+    '7/27',
+    '7:27',
+    'when you see it',
+    'when you fucking see it',
+    'july 27',
+];
+const wysi = async (client, msg_interaction) => {
+    const msg = msg_interaction.content.toLowerCase();
+    try {
+        for (const word of words) {
+            if (msg.includes(word)) {
+                msg_interaction.react('👎');
+                return;
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 module.exports = {
     name: 'messageCreate',
     async execute(msg_interaction) {
         const prefix = ')';
         const client = msg_interaction.client;
+
+        wysi(client, msg_interaction);
 
         if (msg_interaction.author.bot) return;
         if (!msg_interaction.guild) return;
@@ -17,7 +42,7 @@ module.exports = {
 
         const command = client.commands.get(command_name);
         // if (!chat_command) chat_command = client.commands.get(client.aliases.get(command));
-        console.log(command);
+
         if (command) {
             command.chat(client, msg_interaction, args);
         }
