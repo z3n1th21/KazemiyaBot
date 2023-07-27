@@ -1,20 +1,28 @@
 const logger = require('../utility/logger.js');
-const words = [
-    'wysi',
-    '727',
-    'wyfsi',
-    '7/27',
-    '7:27',
-    'when you see it',
-    'when you fucking see it',
-    'july 27',
-    'klee',
+const regexes = [
+    /7.*2.*7/g,
+    /w(|.|..)y(|.|..)s(|.|..)i/g,
+    /w(h)?(e|3)n.*u.*((s|5)(e|3)(e|3)|c).*(i|1)(t|7)/g,
+    /jul.*27/g,
+    /27.*jul/g,
+    /klee/g,
 ];
 const wysi = async (message) => {
-    const msg = message.content.toLowerCase();
     try {
-        for (const word of words) {
-            if (msg.includes(word)) {
+        let msg = message.content.toLowerCase();
+        const array = msg.split(' ');
+        msg = array.filter((element) => !element.startsWith('http')).join('');
+        const chars = /_|\s|_|\.\*\\~/g;
+        msg = msg.replaceAll(chars, '');
+        if (msg.includes('seven') && (msg.includes('twenty') || msg.includes('two'))) {
+            return;
+        }
+        if (msg.includes('seven') && (msg.includes('twenty') || msg.includes('two'))) {
+            message.react('👎');
+            return;
+        }
+        for (const regex of regexes) {
+            if (msg.match(regex)) {
                 message.react('👎');
                 return;
             }
