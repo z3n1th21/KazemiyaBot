@@ -34,8 +34,8 @@ module.exports = {
         if (!message.content.startsWith(prefix)) return;
         if (!message.member) message.member = await message.guild.fetchMember(message);
 
-        const args = message.content.slice(prefix.length).trim().split(/ +/g);
-        const command_name = args.shift().toLowerCase();
+        const args = message.content.slice(prefix.length).trim().toLowerCase().split(/ +/g);
+        const command_name = args.shift();
 
         if (command_name.length === 0) return;
 
