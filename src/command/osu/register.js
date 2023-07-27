@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { get_client } = require('../../utility/mongo.js');
 const { lookup_user } = require('../../utility/osu.js');
-const { slash_reply } = require('../../utility/discord.js');
+const { slash_reply, chat_reply } = require('../../utility/discord.js');
 
 const set_mongo_db = async (discord_id, osu_id) => {
     const user_settings = get_client().db('users').collection('settings');
@@ -15,17 +15,15 @@ const set_mongo_db = async (discord_id, osu_id) => {
     );
 };
 
-const register = async (interaction, user, type, id) => {
+const register = async (id, user, type) => {
     let osu_user;
     try {
         osu_user = await lookup_user(user, undefined, type);
+        await set_mongo_db(id, osu_user.id);
     } catch (error) {
-        await slash_reply(interaction, error.message, true);
-        return;
+        return error.message;
     }
-    console.log(osu_user);
-    await set_mongo_db(id, osu_user.id);
-    await slash_reply(interaction, `set osu! user as ${osu_user.username} (id ${osu_user.id})`, true);
+    return `set osu! user as ${osu_user.username} (id ${osu_user.id})`;
 };
 
 module.exports = {
@@ -47,7 +45,15 @@ module.exports = {
         const user = interaction.options.getString('user');
         const type = interaction.options.getString('type');
         const id = interaction.user.id;
-        console.log(`${user} ${type} ${id}`);
-        await register(interaction, user, type, id);
+        const reply = await register(id, user, type);
+        await slash_reply(interaction, reply, true);
+    },
+    chat: async (client, interaction, args) => {
+        if (!args[0]) {
+            chat_reply(client, interaction, 'usage: `)register <your osu! id/username> <"id"/"username" (optional)>`');
+        } else {
+            const reply = await register(interaction.author.id, args[0], args[1]);
+            chat_reply(client, interaction, reply);
+        }
     },
 };
