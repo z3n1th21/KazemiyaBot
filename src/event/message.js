@@ -7,6 +7,7 @@ const words = [
     'when you see it',
     'when you fucking see it',
     'july 27',
+    'klee',
 ];
 const wysi = async (message) => {
     const msg = message.content.toLowerCase();
@@ -27,10 +28,9 @@ module.exports = {
         const prefix = ')';
         const client = message.client;
 
-        wysi(message);
-
         if (message.author.bot) return;
         if (!message.guild) return;
+        wysi(message);
         if (!message.content.startsWith(prefix)) return;
         if (!message.member) message.member = await message.guild.fetchMember(message);
 
