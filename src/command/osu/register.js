@@ -31,7 +31,7 @@ const register = async (interaction, user, type, id) => {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('register')
-        .setDescription('register/clear your osu! user for this bot')
+        .setDescription('register your osu! user for this bot')
         .addStringOption(option =>
             option.setName('user')
                 .setDescription('your username or id')

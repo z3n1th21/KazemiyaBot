@@ -5,8 +5,9 @@
   "main": "./src/index.js",
   "scripts": {
     "start": "node .",
-    "deploy": "node ./src/deployCommands.js",
-    "deploy-global": "node ./src/deployCommands.js push",
+    "dev": "node . | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
+    "deploy": "node ./src/deploy.js",
+    "deploy-global": "node ./src/deploy.js global",
     "temp-mongo": "node ./temp_mongo.js",
     "temp-osu": "node ./temp_osu.js"
   },
@@ -15,7 +16,8 @@
   "dependencies": {
     "discord.js": "^14.11.0",
     "mongodb": "^5.6.0",
-    "osu-api-extended": "^2.7.5"
+    "osu-api-extended": "^2.7.5",
+    "pino": "^7.0.0-rc.9"
   },
   "devDependencies": {
     "eslint": "^8.15.0"

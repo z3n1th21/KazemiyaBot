@@ -23,7 +23,7 @@ initialize();
 
 // get all commands from ./commands and ./admin
 client.commands = new Collection();
-const command_folders_path = path.join(__dirname, 'commands');
+const command_folders_path = path.join(__dirname, 'command');
 const command_folders = fs.readdirSync(command_folders_path);
 for (const folder of command_folders) {
     const commandsPath = path.join(command_folders_path, folder);
@@ -44,7 +44,7 @@ for (const file of admin_files) {
 
 // get all events from ./events
 client.events = new Collection();
-const events_path = path.join(__dirname, 'events');
+const events_path = path.join(__dirname, 'event');
 const event_files = fs.readdirSync(events_path).filter(file => file.endsWith('.js'));
 for (const file of event_files) {
     const file_path = path.join(events_path, file);

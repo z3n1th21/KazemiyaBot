@@ -8,12 +8,12 @@ const words = [
     'when you fucking see it',
     'july 27',
 ];
-const wysi = async (client, msg_interaction) => {
-    const msg = msg_interaction.content.toLowerCase();
+const wysi = async (message) => {
+    const msg = message.content.toLowerCase();
     try {
         for (const word of words) {
             if (msg.includes(word)) {
-                msg_interaction.react('👎');
+                message.react('👎');
                 return;
             }
         }
@@ -21,21 +21,20 @@ const wysi = async (client, msg_interaction) => {
         console.log(error);
     }
 };
-
 module.exports = {
     name: 'messageCreate',
-    async execute(msg_interaction) {
+    async execute(message) {
         const prefix = ')';
-        const client = msg_interaction.client;
+        const client = message.client;
 
-        wysi(client, msg_interaction);
+        wysi(message);
 
-        if (msg_interaction.author.bot) return;
-        if (!msg_interaction.guild) return;
-        if (!msg_interaction.content.startsWith(prefix)) return;
-        if (!msg_interaction.member) msg_interaction.member = await msg_interaction.guild.fetchMember(msg_interaction);
+        if (message.author.bot) return;
+        if (!message.guild) return;
+        if (!message.content.startsWith(prefix)) return;
+        if (!message.member) message.member = await message.guild.fetchMember(message);
 
-        const args = msg_interaction.content.slice(prefix.length).trim().split(/ +/g);
+        const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const command_name = args.shift().toLowerCase();
 
         if (command_name.length === 0) return;
@@ -44,7 +43,7 @@ module.exports = {
         // if (!chat_command) chat_command = client.commands.get(client.aliases.get(command));
 
         if (command) {
-            command.chat(client, msg_interaction, args);
+            command.chat(client, message, args);
         }
     },
 };

@@ -4,9 +4,9 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { client_id, test_guild_id, token } = require('../config.json');
 
-// Get all commands from ./commands
+// Get all commands from ./command
 const commands = [];
-const folders_path = path.join(__dirname, 'commands');
+const folders_path = path.join(__dirname, 'command');
 const folders = fs.readdirSync(folders_path);
 
 for (const folder of folders) {
@@ -21,11 +21,12 @@ for (const folder of folders) {
 
 const rest = new REST({ version: '9' }).setToken(token);
 
-if (process.argv[2] === 'push') {
+if (process.argv[2] === 'global') {
     rest.put(Routes.applicationCommands(client_id), { body: commands })
         .then(() => console.log('successfully registered application commands globally'))
         .catch(console.error);
 } else {
+    // Deploy admin commands to test server only
     const admin_path = path.join(__dirname, 'admin');
     const admin_files = fs.readdirSync(admin_path).filter(file => file.endsWith('.js'));
     for (const file of admin_files) {
