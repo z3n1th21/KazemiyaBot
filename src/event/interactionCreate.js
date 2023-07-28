@@ -1,3 +1,4 @@
+const logger = require('../utility/logger.js');
 module.exports = {
     name: 'interactionCreate',
     async execute(interaction) {
@@ -13,8 +14,8 @@ module.exports = {
         try {
             await command.slash(interaction);
         } catch (error) {
-            console.error(error);
-            await interaction.reply({ content: 'there was an error while executing this command', ephemeral: true });
+            logger.error(error);
+            await interaction.reply({ content: 'there was an error executing this command', ephemeral: true });
         }
     },
 };

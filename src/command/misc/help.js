@@ -8,7 +8,7 @@ module.exports = {
     slash: async (interaction) => {
         slash_reply(interaction, 'https://github.com/z3n1th21/KazemiyaBot/wiki/Commands', true);
     },
-    chat: async (client, interaction) => {
-        chat_reply(client, interaction, 'https://github.com/z3n1th21/KazemiyaBot/wiki/Commands');
+    chat: async (interaction) => {
+        chat_reply(interaction, 'https://github.com/z3n1th21/KazemiyaBot/wiki/Commands');
     },
 };
