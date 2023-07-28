@@ -15,9 +15,6 @@ const wysi = async (message) => {
         const chars = /_|\s|_|\.\*\\~/g;
         msg = msg.replaceAll(chars, '');
         if (msg.includes('seven') && (msg.includes('twenty') || msg.includes('two'))) {
-            return;
-        }
-        if (msg.includes('seven') && (msg.includes('twenty') || msg.includes('two'))) {
             message.react('👎');
             return;
         }
