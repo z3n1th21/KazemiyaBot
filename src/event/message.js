@@ -1,6 +1,6 @@
 const logger = require('../utility/logger.js');
 const regexes = [
-    /7.*2.*7/g,
+    /7[^0-9]*2[^0-9]*7/g,
     /w(|.|..)y(|.|..)s(|.|..)i/g,
     /w(h)?(e|3)n.*u.*((s|5)(e|3)(e|3)|c).*(i|1)(t|7)/g,
     /jul.*27/g,
