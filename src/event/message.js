@@ -24,15 +24,22 @@ module.exports = {
 
         // map each arg to their key, or their index if no key specified
         const args = new Map();
+        let associative = false;
+        let positional = false;
         array.forEach((arg, index) => {
             arg.replaceAll(/"|'/g, '');
             const i = arg.indexOf('=');
             if (i >= 0) {
                 args.set(arg.substring(0, i), arg.substring(i + 1));
+                associative = true;
             } else {
                 args.set(index, arg);
+                positional = true;
             }
         });
+        if (associative && positional) {
+            await message.reply('please don\'t use both positional and associative arguments');
+        }
 
         try {
             // may need to add `client` parameter later
