@@ -15,8 +15,7 @@ module.exports = {
         const regex = /(?:(([^\s"']+=("[^"]*"|'[^']*'))|[^\s"']+|("[^"]*"|'[^']*')))+/g;
         // remove prefix, then split by space but keeping quoted strings intact
         const array = message.content.slice(1).toLowerCase().match(regex);
-
-        const command_name = array.slice();
+        const command_name = array.shift();
         if (command_name.length === 0) return;
         const command = client.commands.get(command_name);
         if (!command) return;
@@ -40,13 +39,12 @@ module.exports = {
         if (associative && positional) {
             await message.reply('please don\'t use both positional and associative arguments');
         }
-
         try {
             // may need to add `client` parameter later
             command.chat(message, args);
         } catch (error) {
             logger.error(error);
-            await message.reply('there was an error executing this command');
+            await message.reply('there was an unknown error executing this command :(');
         }
     },
 };

@@ -17,11 +17,15 @@ module.exports = {
     },
     get_user: async (id) => {
         const users = _client.db('users').collection('settings');
-        return users.findOne(
+        const result = users.findOne(
             { _id: id },
             {
                 osu_id: true,
             },
         );
+        if (!result) {
+            throw new Error('no user in database');
+        }
+        return result;
     },
 };
