@@ -25,7 +25,7 @@ const check_userpage = (interaction, userpage) => {
             fs.writeFileSync(file, links.join('\n'));
         } else {
             message.push('```');
-            message.push([...links]);
+            message.push.apply(message, links);
             message.push('```');
         }
         message.push('Prepare to save/reupload them!');
