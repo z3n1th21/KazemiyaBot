@@ -52,7 +52,7 @@ module.exports = {
         const userpage = osu_user.page.raw;
         interaction.deferReply({ ephemeral: true });
         const reply = check_userpage(userpage);
-        await slash_reply(interaction, reply, true);
+        slash_reply(interaction, reply, true);
     },
     chat: async (interaction, args) => {
         let osu_user;
@@ -69,6 +69,6 @@ module.exports = {
         }
         const userpage = osu_user.page.raw;
         const reply = check_userpage(userpage);
-        await chat_reply(interaction, reply);
+        chat_reply(interaction, reply);
     },
 };
