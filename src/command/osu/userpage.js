@@ -50,6 +50,7 @@ module.exports = {
             return;
         }
         const userpage = osu_user.page.raw;
+        interaction.deferReply({ ephemeral: true });
         const reply = check_userpage(userpage);
         await slash_reply(interaction, reply, true);
     },
