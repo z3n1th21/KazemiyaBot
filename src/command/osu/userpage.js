@@ -4,6 +4,7 @@ const { lookup_user } = require('../../utility/osu.js');
 const { slash_reply, chat_reply } = require('../../utility/discord.js');
 const fs = require('fs');
 const logger = require('../../utility/logger.js');
+const { project_dir } = require('../../../config.json');
 
 const check_userpage = (interaction, userpage) => {
     const links = [];
@@ -20,7 +21,7 @@ const check_userpage = (interaction, userpage) => {
     if (links) {
         message.push(`You have ${links.length} Discord CDN links in your userpage:`);
         if (links.length > 12) {
-            file = `${__dirname}/temp/${interaction.id}.txt`;
+            file = `${project_dir}/temp/${interaction.id}.txt`;
             fs.writeFileSync(file, links.join('\n'));
         } else {
             message.push('```');
