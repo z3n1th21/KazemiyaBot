@@ -49,14 +49,14 @@ module.exports = {
         await slash_reply(interaction, reply, true);
     },
     chat: async (interaction, args) => {
-        if (!args[0]) {
+        if (!args.get(0)) {
             chat_reply(interaction, 'usage: `)register [your osu! id/username (use quotes if needed)]`');
         } else {
             // if (args[1] && (args[1] !== 'username' || args[1] !== 'id')) {
             //     chat_reply(interaction, 'usage: `)register [your osu! id/username (use quotes if needed)]`');
             //     return;
             // }
-            const reply = await register(interaction.author.id, args[0]);
+            const reply = await register(interaction.author.id, args.get(0));
             chat_reply(interaction, reply);
         }
     },
