@@ -4,5 +4,6 @@
     "test_guild_id": "id of discord server for testing",
     "osu_client_id": "osu client id",
     "osu_client_secret": "osu client secret",
-    "mongo_uri": "mongo uri"
+    "mongo_uri": "mongo uri",
+    "project_dir": "/abs/path/to/project"
 }

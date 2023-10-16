@@ -26,7 +26,7 @@ module.exports = {
         let associative = false;
         let positional = false;
         array.forEach((arg, index) => {
-            arg.replaceAll(/"|'/g, '');
+            arg = arg.replaceAll(/["']/g, '');
             const i = arg.indexOf('=');
             if (i >= 0) {
                 args.set(arg.substring(0, i), arg.substring(i + 1));

@@ -2,30 +2,37 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { get_user } = require('../../utility/mongo.js');
 const { lookup_user } = require('../../utility/osu.js');
 const { slash_reply, chat_reply } = require('../../utility/discord.js');
+const fs = require('fs');
+const logger = require('../../utility/logger.js');
+const { project_dir } = require('../../../config.json');
 
-const check_userpage = (userpage) => {
+const check_userpage = (interaction, userpage) => {
     const links = [];
     const message = [
         'Rumor has it Discord CDN links will not be available off Discord soon:',
         '<https://old.reddit.com/r/DataHoarder/comments/16zs1gt/cdndiscordapp_links_will_expire_breaking/>',
     ];
-    const regex_discord = /(media|cdn).discordapp.(com|net)[^\\[\]?\s]*/gi;
+    const regex_discord = /(media|cdn).discordapp.(com|net)[^\\[\]?\s"']*/gi;
     let result;
     while ((result = regex_discord.exec(userpage))) {
-        links.push(result[0]);
+        links.push(`https://${result[0]}`);
     }
+    let file = undefined;
     if (links) {
         message.push(`You have ${links.length} Discord CDN links in your userpage:`);
-        message.push('```');
-        for (const link of links) {
-            message.push(`https://${link}`);
+        if (links.length > 12) {
+            file = `${project_dir}/temp/${interaction.id}.txt`;
+            fs.writeFileSync(file, links.join('\n'));
+        } else {
+            message.push('```');
+            message.push.apply(message, links);
+            message.push('```');
         }
-        message.push('```');
         message.push('Prepare to save/reupload them!');
     } else {
         message.push('You have no Discord CDN links in your userpage!');
     }
-    return message.join('\n');
+    return [message.join('\n'), file];
 };
 
 module.exports = {
@@ -50,12 +57,23 @@ module.exports = {
             return;
         }
         const userpage = osu_user.page.raw;
-        const reply = check_userpage(userpage);
-        await slash_reply(interaction, reply, true);
+        const [reply, file] = check_userpage(interaction, userpage);
+        if (file) {
+            await interaction.reply({
+                content: reply,
+                files: [file],
+                ephemeral: true,
+            });
+            fs.unlink(file, (err) => {
+                if (err) logger.error(err);
+            });
+        } else {
+            slash_reply(interaction, reply, true);
+        }
     },
     chat: async (interaction, args) => {
         let osu_user;
-        const user = args[0];
+        const user = args.get(0);
         try {
             if (user) {
                 osu_user = await lookup_user(user);
@@ -67,7 +85,18 @@ module.exports = {
             return;
         }
         const userpage = osu_user.page.raw;
-        const reply = check_userpage(userpage);
-        await chat_reply(interaction, reply);
+        const [reply, file] = check_userpage(interaction, userpage);
+        if (file) {
+            await interaction.reply({
+                content: reply,
+                files: [file],
+                allowedMentions: { repliedUser: false },
+            });
+            fs.unlink(file, (err) => {
+                if (err) logger.error(err);
+            });
+        } else {
+            chat_reply(interaction, reply, true);
+        }
     },
 };

@@ -1,8 +1,8 @@
 const pino = require('pino');
-const logger = pino(pino.transport({
-    target: 'pino/file',
+const transport = pino(pino.transport({
+    target: 'pino-pretty',
     options: {
-        destination: './out.log',
+        destination: './pino.log',
     },
 }));
-module.exports = logger;
+module.exports = pino(transport);
