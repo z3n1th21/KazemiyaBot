@@ -1,5 +1,33 @@
 const logger = require('../utility/logger.js');
-
+const regexes = [
+    /7[^0-9]*2[^0-9]*7/g,
+    /w(|.|..)y(|.|..)s(|.|..)i/g,
+    /w(h)?(e|3)n.*u.*((s|5)(e|3)(e|3)|c).*(i|1)(t|7)/g,
+    /jul.*27/g,
+    /27.*jul/g,
+    /klee/g,
+];
+const wysi = async (message) => {
+    try {
+        let msg = message.content.toLowerCase();
+        const array = msg.split(' ');
+        msg = array.filter((element) => !element.startsWith('http')).join('');
+        const chars = /_|\s|_|\.\*\\~/g;
+        msg = msg.replaceAll(chars, '');
+        if (msg.includes('seven') && (msg.includes('twenty') || msg.includes('two'))) {
+            message.react('👎');
+            return;
+        }
+        for (const regex of regexes) {
+            if (msg.match(regex)) {
+                message.react('👎');
+                return;
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
 module.exports = {
     name: 'messageCreate',
     async execute(message) {
@@ -9,6 +37,7 @@ module.exports = {
         if (!message.content.startsWith(prefix)) return;
         if (message.author.bot) return;
         if (!message.guild) return;
+        wysi(message);
         if (!message.member) message.member = await message.guild.fetchMember(message);
 
         // parse content command and args
