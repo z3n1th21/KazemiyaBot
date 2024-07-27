@@ -19,7 +19,7 @@ const client = new Client({
 auth.login(osu_client_id, osu_client_secret, ['public']);
 
 // initialize MongoDB client (open connection)
-initialize();
+// initialize();
 
 // get all commands from ./commands and ./admin
 client.commands = new Collection();

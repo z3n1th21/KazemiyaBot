@@ -34,10 +34,10 @@ module.exports = {
         const prefix = ')';
         const client = message.client;
 
-        if (!message.content.startsWith(prefix)) return;
         if (message.author.bot) return;
         if (!message.guild) return;
         wysi(message);
+        if (!message.content.startsWith(prefix)) return;
         if (!message.member) message.member = await message.guild.fetchMember(message);
 
         // parse content command and args
